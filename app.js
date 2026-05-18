@@ -201,7 +201,7 @@ window.adFallback = function (img) {
 function carousel(h, k, lpHref) {
   const n = (h.figmaSlides || [1, 2, 3]).length || 3;
   const slides = Array.from({ length: n }, (_, i) => {
-    const src = `assets/h${k}-${i + 1}.png`;
+    const src = `assets/h${k}-${i + 1}.jpg`;
     return `<a class="ig-slide" href="${lpHref}" aria-label="広告 ${i + 1}/${n}">
       <img src="${src}" data-h="${k}" alt="広告クリエイティブ ${i + 1}"
            onerror="this.onerror=null;window.adFallback(this)">

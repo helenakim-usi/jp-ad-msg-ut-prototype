@@ -1,0 +1,4 @@
+# Figma 원본 export(대용량) — 웹 최적화본(h?-?.jpg)만 배포
+assets/*
+!assets/h?-?.jpg
+!.gitignore
