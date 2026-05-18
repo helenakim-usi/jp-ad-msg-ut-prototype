@@ -275,18 +275,28 @@ html, body {
 .t5{background:linear-gradient(135deg,#d9d2c4,#f0ebe0);} .t6{background:linear-gradient(135deg,#c5d2d9,#e4edf1);}
 
 /* ============================================================
-   index (시작/가설 선택) — KR 셸
+   index (시작) — A / B / C 선택 버튼만
    ============================================================ */
-.cover { max-width: 760px; color:#E8EAED; padding:40px 22px 80px; }
-.cover h1 { font-size:24px; font-weight:900; color:#fff; }
-.cover .desc { font-size:14px; line-height:1.8; color:#B9BEC6; margin-top:14px; }
-.cover .desc code { background:#1f2228; padding:1px 6px; border-radius:5px; font-size:12px; }
-.cards { display:grid; grid-template-columns:1fr; gap:14px; margin-top:26px; }
-@media(min-width:680px){ .cards{ grid-template-columns:1fr 1fr 1fr; } }
-.hcard { display:block; text-decoration:none; background:#34373d; border:1px solid #44474e; border-radius:18px; padding:20px; color:#E8EAED; transition:.15s; }
-.hcard:hover { background:#3c4047; border-color:var(--ohouse-blue); transform:translateY(-2px); }
-.hcard .tag { display:inline-block; font-size:11px; font-weight:800; letter-spacing:1px; color:#9aa6b2; }
-.hcard h3 { font-size:18px; font-weight:900; color:#fff; margin:8px 0; line-height:1.4; }
-.hcard .jp { font-size:13px; color:#cfd6dd; }
-.hcard .go { margin-top:16px; font-size:13px; font-weight:800; color:var(--ohouse-blue); }
-.note { margin-top:30px; font-size:12px; color:#8b909a; border-left:3px solid #44474e; padding:6px 0 6px 14px; line-height:1.8; }
+.abc-stage {
+  min-height: 100%; display: flex; align-items: center; justify-content: center;
+  padding: 32px 20px;
+}
+.abc {
+  display: flex; gap: 20px; flex-wrap: wrap;
+  align-items: center; justify-content: center;
+}
+.abc-btn {
+  width: 168px; height: 168px; border-radius: 24px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 64px; font-weight: 900; color: #E8EAED;
+  background: #34373d; border: 1px solid #4a4e56;
+  transition: .15s; user-select: none;
+}
+.abc-btn:hover, .abc-btn:active {
+  background: var(--ohouse-blue); border-color: var(--ohouse-blue);
+  color: #fff; transform: translateY(-2px);
+}
+@media (max-width: 560px) {
+  .abc { flex-direction: column; gap: 16px; }
+  .abc-btn { width: 240px; height: 120px; font-size: 52px; }
+}
