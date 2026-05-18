@@ -3,12 +3,22 @@
 Instagram 피드 **광고 → LP 클릭 플로우** UT용 HTML 프로토타입.
 가설 H1/H2/H3 각각 광고 카피와 도착 LP가 다름.
 
-## 실행
+## 접속 (온라인 UT — 고정 링크)
+
+GitHub Pages 배포: **https://helenakim-usi.github.io/jp-ad-msg-ut-prototype/**
+
+| 용도 | URL |
+|---|---|
+| 시작 화면(가설 선택) | `…/jp-ad-msg-ut-prototype/` |
+| H1 / H2 / H3 바로 시작 | `…/feed.html?h=1` (`h=2`, `h=3`) |
+
+원격 고객이 자기 기기에서 직접 접속·조작 가능. 파일 수정 후 `git push` → 1~2분 내 반영.
+
+## 로컬 실행 (개발용)
 
 ```
 cd "JP_광고메시지_UT_프로토타입"
-python3 -m http.server 8080
-# 브라우저에서 http://localhost:8080  열기
+python3 -m http.server 8080   # http://localhost:8080
 ```
 
 `index.html`(가설 선택) → `feed.html?h=N`(인스타 피드+광고) → 광고 탭 → LP
