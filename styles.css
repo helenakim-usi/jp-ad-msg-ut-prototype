@@ -30,22 +30,19 @@ html, body {
   background: #2B2E33;
 }
 
-/* ---- 디바이스 프레임 (UT용 폰 목업) ---- */
+/* ---- 풀스크린 (실기기 화면에 꽉 차게) ---- */
 .stage {
-  min-height: 100%;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  padding: 28px 16px 48px;
 }
 .device {
-  width: 390px;
-  height: 844px;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
   background: #fff;
-  border-radius: 44px;
-  border: 11px solid #0c0c0e;
-  box-shadow: 0 22px 60px rgba(0,0,0,.45);
   overflow: hidden;
   position: relative;
   display: flex;
@@ -75,9 +72,9 @@ html, body {
    Instagram 피드
    ============================================================ */
 .ig-topbar {
-  height: 50px; flex: none;
+  min-height: calc(50px + env(safe-area-inset-top, 0px)); flex: none;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 16px; border-bottom: .5px solid var(--ig-line); background:#fff;
+  padding: env(safe-area-inset-top, 0px) 16px 0; border-bottom: .5px solid var(--ig-line); background:#fff;
 }
 .ig-logo { font-family: "Snell Roundhand", "Brush Script MT", cursive; font-size: 26px; font-weight: 700; letter-spacing: .5px; }
 .ig-topbar .acts { display: flex; gap: 18px; }
@@ -167,7 +164,9 @@ html, body {
 .ig-time { padding: 2px 14px 14px; font-size: 10px; color: var(--ig-sub); text-transform: uppercase; letter-spacing:.3px; }
 
 .ig-tabbar {
-  height: 50px; flex:none; display:flex; align-items:center; justify-content:space-around;
+  min-height: calc(50px + env(safe-area-inset-bottom, 0px)); flex:none;
+  display:flex; align-items:flex-start; justify-content:space-around;
+  padding-top: 12px; padding-bottom: env(safe-area-inset-bottom, 0px);
   border-top:.5px solid var(--ig-line); background:#fff;
 }
 .ig-tabbar svg { width: 25px; height: 25px; }
@@ -218,8 +217,8 @@ html, body {
    LP (랜딩페이지) — 모바일
    ============================================================ */
 .lp-nav {
-  height: 50px; flex:none; display:flex; align-items:center; gap:12px;
-  padding: 0 14px; border-bottom:.5px solid var(--ohouse-line); background:#fff; position:sticky; top:0; z-index:5;
+  min-height: calc(50px + env(safe-area-inset-top, 0px)); flex:none; display:flex; align-items:center; gap:12px;
+  padding: env(safe-area-inset-top, 0px) 14px 0; border-bottom:.5px solid var(--ohouse-line); background:#fff; position:sticky; top:0; z-index:5;
 }
 .lp-nav .back { font-size: 22px; line-height:1; cursor:pointer; color:var(--ohouse-ink); text-decoration:none; }
 .lp-nav .oh { display:flex; align-items:center; gap:6px; font-weight:800; font-size:16px; color:var(--ohouse-navy); }

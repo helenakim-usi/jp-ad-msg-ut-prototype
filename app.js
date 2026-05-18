@@ -256,7 +256,6 @@ function renderFeed() {
   document.title = `UT · 広告 (H${k})`;
   document.getElementById("app").innerHTML = `
   <div class="device">
-    ${statusbar(false)}
     <div class="ig-topbar">
       <div class="ig-logo">Instagram</div>
       <div class="acts"><span>${I.heart}</span><span>${I.dm}</span></div>
@@ -316,7 +315,6 @@ function renderFeed() {
     <div class="ig-tabbar">
       ${I.home}${I.search}${I.reels}${I.shop}<span class="pf"></span>
     </div>
-    ${homeIndicator}
   </div>`;
 
   wireCarousel();
@@ -372,7 +370,6 @@ function renderLP() {
 
   document.getElementById("app").innerHTML = `
   <div class="device">
-    ${statusbar(false)}
     <div class="screen">
       <div class="lp-nav">
         <a class="back" href="feed.html?h=${k}" title="広告に戻る">‹</a>
@@ -393,6 +390,5 @@ function renderLP() {
         가설 H${k} · ${h.tag}
       </div>
     </div>
-    ${homeIndicator}
   </div>`;
 }
