@@ -1,0 +1,257 @@
+/* ============================================================
+   JP 광고 메시지 UT 프로토타입 — 공통 스타일
+   Instagram 피드 모킹 + 가설별 LP
+   ============================================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+a { color: inherit; text-decoration: none; }
+
+:root {
+  /* Ohouse 브랜드 */
+  --ohouse-blue: #00A8E8;
+  --ohouse-navy: #16385B;
+  --ohouse-ink: #1B1F23;
+  --ohouse-gray: #6B7280;
+  --ohouse-line: #ECEEF1;
+  --ohouse-bg: #F4F5F7;
+  /* Instagram */
+  --ig-ink: #262626;
+  --ig-sub: #8E8E8E;
+  --ig-line: #DBDBDB;
+  --ig-blue: #0095F6;
+}
+
+html, body {
+  height: 100%;
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+               "Noto Sans JP", "Apple SD Gothic Neo", "Pretendard",
+               -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--ohouse-ink);
+  background: #2B2E33;
+}
+
+/* ---- 디바이스 프레임 (UT용 폰 목업) ---- */
+.stage {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 16px 48px;
+}
+.device {
+  width: 390px;
+  height: 844px;
+  background: #fff;
+  border-radius: 44px;
+  border: 11px solid #0c0c0e;
+  box-shadow: 0 22px 60px rgba(0,0,0,.45);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.screen { flex: 1; overflow-y: auto; overflow-x: hidden; position: relative; -webkit-overflow-scrolling: touch; background: #fff; }
+.screen::-webkit-scrollbar { width: 0; }
+
+/* ---- 상태바 ---- */
+.statusbar {
+  height: 44px; flex: none;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 26px; font-size: 14px; font-weight: 700; color: #000;
+  background: #fff;
+}
+.statusbar.dark { background: #000; color: #fff; }
+.statusbar .icons { display: flex; gap: 6px; align-items: center; font-size: 12px; }
+
+/* ---- 하단 홈 인디케이터 ---- */
+.home-indicator {
+  height: 22px; flex: none; display: flex; align-items: center; justify-content: center;
+  background: inherit;
+}
+.home-indicator::after { content: ""; width: 134px; height: 5px; border-radius: 3px; background: #111; opacity: .85; }
+
+/* ============================================================
+   Instagram 피드
+   ============================================================ */
+.ig-topbar {
+  height: 50px; flex: none;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; border-bottom: .5px solid var(--ig-line); background:#fff;
+}
+.ig-logo { font-family: "Snell Roundhand", "Brush Script MT", cursive; font-size: 26px; font-weight: 700; letter-spacing: .5px; }
+.ig-topbar .acts { display: flex; gap: 18px; }
+.ig-topbar .acts svg { width: 24px; height: 24px; }
+
+.ig-stories {
+  display: flex; gap: 14px; padding: 12px 14px; overflow-x: auto;
+  border-bottom: .5px solid var(--ig-line); background:#fff;
+}
+.ig-stories::-webkit-scrollbar { display: none; }
+.story { flex: none; width: 62px; text-align: center; }
+.story .ring {
+  width: 60px; height: 60px; border-radius: 50%; padding: 2.5px;
+  background: linear-gradient(45deg,#f9ce34,#ee2a7b,#6228d7);
+}
+.story.me .ring { background: var(--ig-line); }
+.story .ring i {
+  display: block; width: 100%; height: 100%; border-radius: 50%;
+  border: 2.5px solid #fff; background-size: cover; background-position: center;
+  background-color: #cfd6dd;
+}
+.story span { display:block; font-size: 11px; margin-top: 5px; color: var(--ig-ink); white-space: nowrap; overflow:hidden; text-overflow: ellipsis; }
+
+.ig-post { border-bottom: .5px solid var(--ig-line); background:#fff; }
+.ig-post .head { display: flex; align-items: center; padding: 10px 14px; gap: 10px; }
+.ig-post .head .ava {
+  width: 34px; height: 34px; border-radius: 50%; background: var(--ohouse-blue);
+  display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:13px; flex:none;
+  background-size: cover; background-position:center;
+}
+.ig-post .head .meta { flex:1; min-width:0; line-height: 1.25; }
+.ig-post .head .meta b { font-size: 13px; font-weight: 700; }
+.ig-post .head .meta small { display:block; font-size: 11px; color: var(--ig-sub); }
+.ig-post .head .dots { font-size: 18px; color: var(--ig-ink); letter-spacing: 1px; }
+
+.ig-media { width: 100%; aspect-ratio: 1/1; display:block; background:#e9edf1; cursor:pointer; }
+.ig-cta {
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 12px 14px; background:#fafafa; border-top:.5px solid #efefef; cursor:pointer;
+}
+.ig-cta b { font-size: 14px; font-weight: 700; }
+.ig-cta .chev { color: var(--ig-sub); font-size: 16px; }
+
+.ig-actions { display:flex; align-items:center; padding: 8px 12px 4px; gap: 16px; }
+.ig-actions svg { width: 24px; height: 24px; }
+.ig-actions .spacer { flex:1; }
+.ig-likes { padding: 2px 14px; font-size: 13px; font-weight: 700; }
+.ig-caption { padding: 4px 14px 2px; font-size: 13px; line-height: 1.5; }
+.ig-caption b { font-weight: 700; margin-right: 6px; }
+.ig-caption .more { color: var(--ig-sub); }
+.ig-comments { padding: 4px 14px; font-size: 13px; color: var(--ig-sub); }
+.ig-time { padding: 2px 14px 14px; font-size: 10px; color: var(--ig-sub); text-transform: uppercase; letter-spacing:.3px; }
+
+.ig-tabbar {
+  height: 50px; flex:none; display:flex; align-items:center; justify-content:space-around;
+  border-top:.5px solid var(--ig-line); background:#fff;
+}
+.ig-tabbar svg { width: 25px; height: 25px; }
+.ig-tabbar .pf { width: 25px; height: 25px; border-radius: 50%; border: 1.5px solid var(--ig-ink); }
+
+/* 광고 크리에이티브 (Figma 소재 재현 — 사진 영역은 플레이스홀더) */
+.creative { position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; color:#fff; }
+.creative .oh-logo { position:absolute; display:flex; align-items:center; gap:5px; font-weight:800; font-size:14px; letter-spacing:.2px; }
+.creative .oh-logo .mk { width:16px; height:16px; border-radius:5px; background:#fff; display:inline-block; }
+.ph {
+  background:
+    repeating-linear-gradient(45deg, rgba(0,0,0,.04) 0 8px, rgba(0,0,0,.0) 8px 16px),
+    linear-gradient(135deg,#d7dee6,#eef2f6);
+  display:flex; align-items:center; justify-content:center;
+  color:#9aa6b2; font-size:11px; text-align:center; padding:6px;
+}
+.ph small { opacity:.8; }
+
+/* H1 크리에이티브 — 네이비 카드 + 상품 그리드 (플렉스, 비율 안전) */
+.cr-h1 { background: linear-gradient(160deg,#1d4e74,#16385B); display:flex; flex-direction:column; padding:7% 8% 6%; }
+.cr-h1 .oh-logo { position:static; flex:none; }
+.cr-h1 .hl { flex:none; margin:6% 0 5%; font-size:7vw; font-weight:900; line-height:1.3; letter-spacing:.3px; }
+.cr-h1 .grid { flex:1; min-height:0; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:4%; }
+.cr-h1 .grid .ph { border-radius:14px; }
+.cr-h1 .foot { flex:none; text-align:center; font-weight:800; font-size:3.6vw; opacity:.95; margin-top:5%; }
+@media(min-width:430px){ .cr-h1 .hl{font-size:30px} .cr-h1 .foot{font-size:15px} }
+
+/* H2 크리에이티브 — 라이트 + 품질/가격 */
+.cr-h2 { background:#fff; color:var(--ohouse-ink); }
+.cr-h2 .photo { position:absolute; inset:0; }
+.cr-h2 .photo .ph { width:100%; height:100%; }
+.cr-h2 .scrim { position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.30) 0%, rgba(0,0,0,0) 36%, rgba(0,0,0,.04) 70%, rgba(0,0,0,.30) 100%); }
+.cr-h2 .oh-logo { top:42px; left:42px; color:#fff; }
+.cr-h2 .hl { position:absolute; top:90px; left:42px; color:#fff; font-size:46px; font-weight:900; line-height:1.22; text-shadow:0 2px 14px rgba(0,0,0,.35); }
+.cr-h2 .hl span.b { color:#FFD43B; }
+.cr-h2 .credit { position:absolute; bottom:34px; left:42px; color:#fff; font-size:13px; font-weight:700; opacity:.9; display:flex; align-items:center; gap:6px; }
+.cr-h2 .credit .mk { width:15px; height:15px; border-radius:5px; background:#fff; }
+
+/* H3 크리에이티브 — 룸 사진 + 좌상단 카피 */
+.cr-h3 { background:#cfd6dd; color:#fff; }
+.cr-h3 .photo { position:absolute; inset:0; }
+.cr-h3 .photo .ph { width:100%; height:100%; }
+.cr-h3 .scrim { position:absolute; inset:0; background:linear-gradient(135deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.05) 50%); }
+.cr-h3 .oh-logo { top:40px; right:42px; }
+.cr-h3 .hl { position:absolute; top:54px; left:42px; right:120px; font-size:30px; font-weight:900; line-height:1.36; text-shadow:0 2px 12px rgba(0,0,0,.4); }
+
+/* ============================================================
+   LP (랜딩페이지) — 모바일
+   ============================================================ */
+.lp-nav {
+  height: 50px; flex:none; display:flex; align-items:center; gap:12px;
+  padding: 0 14px; border-bottom:.5px solid var(--ohouse-line); background:#fff; position:sticky; top:0; z-index:5;
+}
+.lp-nav .back { font-size: 22px; line-height:1; cursor:pointer; color:var(--ohouse-ink); text-decoration:none; }
+.lp-nav .oh { display:flex; align-items:center; gap:6px; font-weight:800; font-size:16px; color:var(--ohouse-navy); }
+.lp-nav .oh .mk { width:18px; height:18px; border-radius:6px; background:var(--ohouse-blue); }
+.lp-nav .sp { flex:1; }
+.lp-nav .ic { width:22px; height:22px; color:var(--ohouse-ink); }
+
+.lp-hero { position:relative; color:#fff; padding:34px 22px 30px; }
+.lp-hero.h1 { background:linear-gradient(160deg,#1d4e74,#16385B); }
+.lp-hero.h2 { background:linear-gradient(160deg,#0E7C9B,#0A5C73); }
+.lp-hero.h3 { background:linear-gradient(160deg,#274690,#16285B); }
+.lp-hero .eyebrow { font-size:12px; font-weight:800; letter-spacing:1.5px; opacity:.85; }
+.lp-hero h1 { font-size:27px; font-weight:900; line-height:1.34; margin:10px 0 8px; }
+.lp-hero p { font-size:13px; opacity:.9; line-height:1.6; }
+.lp-hero .badge { display:inline-block; margin-top:14px; background:#FFD43B; color:#16385B; font-weight:900; font-size:13px; padding:6px 12px; border-radius:999px; }
+
+.sec { padding: 26px 18px; border-bottom: 8px solid var(--ohouse-bg); }
+.sec:last-child { border-bottom: none; }
+.sec h2 { font-size:18px; font-weight:900; color:var(--ohouse-ink); }
+.sec .sub { font-size:12px; color:var(--ohouse-gray); margin-top:5px; }
+.sec .lead { font-size:13px; color:#475569; margin-top:8px; line-height:1.6; }
+
+.chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; }
+.chip { font-size:13px; font-weight:700; padding:9px 15px; border-radius:999px; background:#fff; border:1px solid var(--ohouse-line); color:var(--ohouse-ink); }
+.chip.on { background:var(--ohouse-navy); color:#fff; border-color:var(--ohouse-navy); }
+
+.taste { margin-top:16px; display:flex; flex-direction:column; gap:12px; }
+.taste .card { display:flex; gap:14px; align-items:center; background:#fff; border:1px solid var(--ohouse-line); border-radius:16px; padding:14px; }
+.taste .card .thumb { width:78px; height:78px; border-radius:12px; flex:none; }
+.taste .card .tx b { font-size:15px; font-weight:900; }
+.taste .card .tx p { font-size:12px; color:var(--ohouse-gray); margin-top:6px; line-height:1.55; }
+
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+.grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:16px; }
+.pcard .img { aspect-ratio:1/1; border-radius:12px; }
+.pcard .nm { font-size:12px; margin-top:7px; color:var(--ohouse-ink); line-height:1.4; }
+.pcard .pr { font-size:13px; font-weight:900; margin-top:3px; }
+.pcard .pr s { color:var(--ohouse-gray); font-weight:500; font-size:11px; margin-right:5px; }
+.pcard .pr em { color:#E8454C; font-style:normal; }
+
+.more-btn { display:block; width:100%; margin-top:18px; padding:13px; text-align:center; font-weight:800; font-size:14px; border:1px solid var(--ohouse-line); border-radius:12px; background:#fff; color:var(--ohouse-ink); }
+
+.banner { margin-top:16px; border-radius:16px; padding:22px; color:#fff; background:linear-gradient(135deg,#16385B,#0E7C9B); }
+.banner b { font-size:17px; font-weight:900; }
+.banner p { font-size:12px; opacity:.9; margin-top:6px; }
+
+.lp-foot { padding:30px 18px 40px; background:#fff; color:var(--ohouse-gray); font-size:11px; line-height:1.7; }
+.lp-foot .oh { font-weight:900; color:var(--ohouse-navy); font-size:15px; margin-bottom:8px; }
+
+/* 색 팔레트별 썸네일 톤(사진 대체) */
+.t1{background:linear-gradient(135deg,#c9d6e3,#e9eef3);} .t2{background:linear-gradient(135deg,#d8cfc2,#efe9df);}
+.t3{background:linear-gradient(135deg,#cbd9cf,#e6efe8);} .t4{background:linear-gradient(135deg,#d6ccd9,#ece6ef);}
+.t5{background:linear-gradient(135deg,#d9d2c4,#f0ebe0);} .t6{background:linear-gradient(135deg,#c5d2d9,#e4edf1);}
+
+/* ============================================================
+   index (시작/가설 선택) — KR 셸
+   ============================================================ */
+.cover { max-width: 760px; color:#E8EAED; padding:40px 22px 80px; }
+.cover h1 { font-size:24px; font-weight:900; color:#fff; }
+.cover .desc { font-size:14px; line-height:1.8; color:#B9BEC6; margin-top:14px; }
+.cover .desc code { background:#1f2228; padding:1px 6px; border-radius:5px; font-size:12px; }
+.cards { display:grid; grid-template-columns:1fr; gap:14px; margin-top:26px; }
+@media(min-width:680px){ .cards{ grid-template-columns:1fr 1fr 1fr; } }
+.hcard { display:block; text-decoration:none; background:#34373d; border:1px solid #44474e; border-radius:18px; padding:20px; color:#E8EAED; transition:.15s; }
+.hcard:hover { background:#3c4047; border-color:var(--ohouse-blue); transform:translateY(-2px); }
+.hcard .tag { display:inline-block; font-size:11px; font-weight:800; letter-spacing:1px; color:#9aa6b2; }
+.hcard h3 { font-size:18px; font-weight:900; color:#fff; margin:8px 0; line-height:1.4; }
+.hcard .jp { font-size:13px; color:#cfd6dd; }
+.hcard .go { margin-top:16px; font-size:13px; font-weight:800; color:var(--ohouse-blue); }
+.note { margin-top:30px; font-size:12px; color:#8b909a; border-left:3px solid #44474e; padding:6px 0 6px 14px; line-height:1.8; }

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JP 광고 메시지 UT 프로토타입</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="cover">
+  <h1>JP 광고 메시지 UT 프로토타입</h1>
+  <div class="desc">
+    Instagram 피드에 노출되는 <b>광고 → 랜딩페이지(LP)</b> 클릭 플로우를 검증하기 위한 프로토타입입니다.<br>
+    가설(Hypothesis)별로 광고 카피와 도착 LP가 다릅니다. 진행할 가설을 선택하면 인스타그램 피드 화면에서 시작합니다.
+  </div>
+
+  <div class="cards">
+    <a class="hcard" href="feed.html?h=1">
+      <span class="tag">HYPOTHESIS 01</span>
+      <h3>좋아하는 디자인을<br>손닿는 가격에</h3>
+      <div class="jp">好きなデザインを手が届く価格で</div>
+      <div class="go">피드에서 시작 →</div>
+    </a>
+    <a class="hcard" href="feed.html?h=2">
+      <span class="tag">HYPOTHESIS 02</span>
+      <h3>이 품질에<br>이 가격</h3>
+      <div class="jp">この品質でこの価格</div>
+      <div class="go">피드에서 시작 →</div>
+    </a>
+    <a class="hcard" href="feed.html?h=3">
+      <span class="tag">HYPOTHESIS 03</span>
+      <h3>예쁜 방 만들기에<br>넓이는 관계없다</h3>
+      <div class="jp">かわいい部屋づくりに広さは関係ない</div>
+      <div class="go">피드에서 시작 →</div>
+    </a>
+  </div>
+
+  <div class="note">
+    · 광고 클릭 시 실제 기획전 페이지(<code>ohouse.com/ja-JP/store/exhibitions/10072~10074</code>)로 전체 화면 전환됩니다.
+    URL은 <code>app.js</code>의 <code>lpUrl</code>에서 변경할 수 있습니다.<br>
+    · 광고 소재의 사진 영역(<code>.ph</code>)은 Figma export 한도 리셋 후 실제 이미지로 교체 예정입니다.<br>
+    · LP H1의 「韓国 インテリア」 항목은 Figma 원본 그대로이며, JP "한국 인테리어 전면 소구 중단" 방침과 충돌 가능 — README 참고.
+  </div>
+</div>
+</body>
+</html>
