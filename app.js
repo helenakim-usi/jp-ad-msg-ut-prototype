@@ -246,85 +246,131 @@ function wireCarousel() {
   );
 }
 
-/* ---------- Instagram 피드 렌더 ---------- */
+/* ---------- Instagram 스토리 플레이어 렌더 ---------- */
+const STORY_MS = 5000; // 슬라이드당 노출(자동 넘김)
+
 function renderFeed() {
   const k = getH();
   const h = HYPO[k];
-  // 실제 LP URL이 설정돼 있으면 그쪽으로(실 페이지 플로우), 아니면 재현본 lp.html
   const lpHref = h.lpUrl ? h.lpUrl : `lp.html?h=${k}`;
-  const stories = ["あなた", "ohouse_jp", "muji_life", "yuka.room", "tokyo_deco", "ks_home"];
-  document.title = `UT · 広告 (H${k})`;
+  const n = (h.figmaSlides || [1, 2, 3]).length || 3;
+  const srcs = Array.from({ length: n }, (_, i) => `assets/h${k}-${i + 1}.jpg`);
+  const linkLabel = h.storyLink || "詳しくはこちら";
+  document.title = `UT · ストーリー (H${k})`;
+
+  const bars = Array.from(
+    { length: n },
+    () => `<div class="sbar"><i></i></div>`
+  ).join("");
+
   document.getElementById("app").innerHTML = `
   <div class="device">
-    <div class="ig-topbar">
-      <div class="ig-logo">Instagram</div>
-      <div class="acts"><span>${I.heart}</span><span>${I.dm}</span></div>
-    </div>
-    <div class="screen" id="scr">
-      <div class="ig-stories">
-        ${stories
-          .map(
-            (s, i) =>
-              `<div class="story ${i === 0 ? "me" : ""}"><div class="ring"><i></i></div><span>${s}</span></div>`
-          )
-          .join("")}
+    <div class="igstory" id="story">
+      <div class="story-bg" id="stBg"></div>
+      <div class="story-media" id="stMedia">
+        <img id="stImg" alt="ストーリー" data-h="${k}">
+      </div>
+      <div class="story-shade"></div>
+
+      <div class="story-bars" id="stBars">${bars}</div>
+
+      <div class="story-head">
+        <div class="st-ava"></div>
+        <div class="st-name">ohousejp</div>
+        <div class="st-time">2時間</div>
+        <div class="st-sp"></div>
+        <div class="st-dots">···</div>
+        <a class="st-x" href="index.html" aria-label="閉じる">✕</a>
       </div>
 
-      <!-- 일반 피드(맥락용) -->
-      <div class="ig-post">
-        <div class="head">
-          <div class="ava" style="background:#C9A36B">y</div>
-          <div class="meta"><b>yuka.room</b><small>東京</small></div>
-          <div class="dots">···</div>
-        </div>
-        <div class="ig-media ph" style="aspect-ratio:1/1"><small>📷 一般投稿</small></div>
-        <div class="ig-actions">${I.heart}${I.comment}${I.share}<span class="spacer"></span>${I.bookmark}</div>
-        <div class="ig-likes">「いいね！」1,204件</div>
-        <div class="ig-caption"><b>yuka.room</b>休日の模様替え🛋️ #一人暮らし</div>
-        <div class="ig-time">2時間前</div>
+      <a class="story-link" id="stLink" href="${lpHref}">
+        <span class="lk">🔗</span> ${linkLabel} <span class="ar">→</span>
+      </a>
+
+      <div class="story-msg">
+        <div class="msg-in">メッセージを送信...</div>
+        <span class="msg-ic">♡</span>
+        <span class="msg-ic">➤</span>
       </div>
 
-      <!-- 스폰서 광고 (UT 대상) -->
-      <div class="ig-post" id="ad">
-        <div class="head">
-          <div class="ava"><i style="display:block;width:18px;height:18px;border-radius:5px;background:#fff"></i></div>
-          <div class="meta"><b>ohouse_jp</b><small>広告</small></div>
-          <div class="dots">···</div>
-        </div>
-        ${carousel(h, k, lpHref)}
-        <a href="${lpHref}" class="ig-cta"><b>詳しくはこちら</b><span class="chev">›</span></a>
-        <div class="ig-actions">${I.heart}${I.comment}${I.share}<span class="spacer"></span>${I.bookmark}</div>
-        <div class="ig-likes">「いいね！」3,872件</div>
-        <div class="ig-caption"><b>ohouse_jp</b>${h.caption}<span class="more"> …続きを読む</span></div>
-        <div class="ig-comments">コメント128件をすべて見る</div>
-        <div class="ig-time">1日前</div>
-      </div>
-
-      <div class="ig-post">
-        <div class="head">
-          <div class="ava" style="background:#7C9CB5">t</div>
-          <div class="meta"><b>tokyo_deco</b><small>スポンサーではない投稿</small></div>
-          <div class="dots">···</div>
-        </div>
-        <div class="ig-media ph" style="aspect-ratio:1/1"><small>📷 一般投稿</small></div>
-        <div class="ig-actions">${I.heart}${I.comment}${I.share}<span class="spacer"></span>${I.bookmark}</div>
-        <div class="ig-likes">「いいね！」842件</div>
-        <div class="ig-time">5時間前</div>
-      </div>
-    </div>
-    <div class="ig-tabbar">
-      ${I.home}${I.search}${I.reels}${I.shop}<span class="pf"></span>
+      <button class="tap-zone tap-prev" id="tapPrev" aria-label="前へ"></button>
+      <button class="tap-zone tap-next" id="tapNext" aria-label="次へ"></button>
     </div>
   </div>`;
 
-  wireCarousel();
+  wireStory(srcs, h, lpHref);
+}
 
-  // 광고가 보이도록 살짝 스크롤(피드 맥락 인지 후 광고 도달)
-  const scr = document.getElementById("scr");
-  setTimeout(() => {
-    const ad = document.getElementById("ad");
-    if (ad) scr.scrollTo({ top: ad.offsetTop - 70, behavior: "smooth" });
-  }, 700);
+function wireStory(srcs, h, lpHref) {
+  const n = srcs.length;
+  let cur = 0,
+    timer = null;
+  const img = document.getElementById("stImg");
+  const bg = document.getElementById("stBg");
+  const media = document.getElementById("stMedia");
+  const bars = [...document.querySelectorAll("#stBars .sbar i")];
+
+  const clearTimer = () => timer && (clearTimeout(timer), (timer = null));
+
+  function paintBars() {
+    bars.forEach((el, j) => {
+      el.style.transition = "none";
+      el.style.width = j < cur ? "100%" : "0%";
+    });
+    // 현재 바: 0 → 100% 를 STORY_MS 동안 채움
+    const active = bars[cur];
+    if (active) {
+      // reflow 후 트랜지션 시작
+      void active.offsetWidth;
+      active.style.transition = `width ${STORY_MS}ms linear`;
+      active.style.width = "100%";
+    }
+  }
+
+  function show(i) {
+    clearTimer();
+    cur = i;
+    const src = srcs[i];
+    img.style.display = "";
+    img.onerror = () => {
+      // 이미지 미존재 시 재현 크리에이티브로 대체
+      img.onerror = null;
+      img.style.display = "none";
+      bg.style.backgroundImage = "none";
+      bg.style.background = "#16385B";
+      media.querySelector(".cr-fallback")?.remove();
+      const w = document.createElement("div");
+      w.className = "cr-fallback";
+      w.innerHTML = creative(h);
+      media.appendChild(w);
+    };
+    img.src = src;
+    bg.style.backgroundImage = `url("${src}")`;
+    paintBars();
+    timer = setTimeout(next, STORY_MS);
+  }
+
+  function next() {
+    if (cur < n - 1) show(cur + 1);
+    else {
+      clearTimer();
+      window.location.href = lpHref; // 끝까지 보면 기획전 LP로
+    }
+  }
+  function prev() {
+    if (cur > 0) show(cur - 1);
+    else show(0);
+  }
+
+  document.getElementById("tapNext").addEventListener("click", next);
+  document.getElementById("tapPrev").addEventListener("click", prev);
+  // 링크 스티커는 탭존보다 위 — 클릭 시 즉시 LP
+  document.getElementById("stLink").addEventListener("click", (e) => {
+    e.stopPropagation();
+    clearTimer();
+  });
+
+  show(0);
 }
 
 /* ---------- LP 렌더 ---------- */
