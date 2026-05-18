@@ -246,9 +246,7 @@ function wireCarousel() {
   );
 }
 
-/* ---------- Instagram 스토리 플레이어 렌더 ---------- */
-const STORY_MS = 5000; // 슬라이드당 노출(자동 넘김)
-
+/* ---------- Instagram 스토리 플레이어 렌더 (좌우 스와이프, 자동넘김 없음) ---------- */
 function renderFeed() {
   const k = getH();
   const h = HYPO[k];
@@ -293,8 +291,7 @@ function renderFeed() {
         <span class="msg-ic">➤</span>
       </div>
 
-      <button class="tap-zone tap-prev" id="tapPrev" aria-label="前へ"></button>
-      <button class="tap-zone tap-next" id="tapNext" aria-label="次へ"></button>
+      <div class="swipe-hint" id="swipeHint">← スワイプ →</div>
     </div>
   </div>`;
 
@@ -303,72 +300,88 @@ function renderFeed() {
 
 function wireStory(srcs, h, lpHref) {
   const n = srcs.length;
-  let cur = 0,
-    timer = null;
+  let cur = 0;
+  const root = document.getElementById("story");
   const img = document.getElementById("stImg");
   const bg = document.getElementById("stBg");
   const media = document.getElementById("stMedia");
+  const hint = document.getElementById("swipeHint");
   const bars = [...document.querySelectorAll("#stBars .sbar i")];
 
-  const clearTimer = () => timer && (clearTimeout(timer), (timer = null));
-
+  // 진행바 = 위치 표시(현재/지난 칸 채움), 시간 자동채움 없음
   function paintBars() {
     bars.forEach((el, j) => {
-      el.style.transition = "none";
-      el.style.width = j < cur ? "100%" : "0%";
+      el.style.transition = "width .2s ease";
+      el.style.width = j <= cur ? "100%" : "0%";
     });
-    // 현재 바: 0 → 100% 를 STORY_MS 동안 채움
-    const active = bars[cur];
-    if (active) {
-      // reflow 후 트랜지션 시작
-      void active.offsetWidth;
-      active.style.transition = `width ${STORY_MS}ms linear`;
-      active.style.width = "100%";
-    }
   }
 
   function show(i) {
-    clearTimer();
     cur = i;
     const src = srcs[i];
     img.style.display = "";
+    media.querySelector(".cr-fallback")?.remove();
     img.onerror = () => {
-      // 이미지 미존재 시 재현 크리에이티브로 대체
       img.onerror = null;
       img.style.display = "none";
       bg.style.backgroundImage = "none";
       bg.style.background = "#16385B";
-      media.querySelector(".cr-fallback")?.remove();
       const w = document.createElement("div");
       w.className = "cr-fallback";
       w.innerHTML = creative(h);
       media.appendChild(w);
     };
     img.src = src;
+    bg.style.background = "";
     bg.style.backgroundImage = `url("${src}")`;
     paintBars();
-    timer = setTimeout(next, STORY_MS);
   }
 
   function next() {
     if (cur < n - 1) show(cur + 1);
-    else {
-      clearTimer();
-      window.location.href = lpHref; // 끝까지 보면 기획전 LP로
-    }
+    else window.location.href = lpHref; // 마지막에서 더 넘기면 기획전 LP로
   }
   function prev() {
-    if (cur > 0) show(cur - 1);
-    else show(0);
+    if (cur > 0) show(cur - 1); // 첫 장에서 이전은 그대로
   }
 
-  document.getElementById("tapNext").addEventListener("click", next);
-  document.getElementById("tapPrev").addEventListener("click", prev);
-  // 링크 스티커는 탭존보다 위 — 클릭 시 즉시 LP
-  document.getElementById("stLink").addEventListener("click", (e) => {
-    e.stopPropagation();
-    clearTimer();
+  // ----- 좌우 스와이프(터치/마우스 드래그) -----
+  let sx = 0,
+    sy = 0,
+    dragging = false;
+  const THRESH = 45; // 이 이상 수평 이동해야 슬라이드 전환
+
+  root.addEventListener(
+    "pointerdown",
+    (e) => {
+      // 링크 스티커·메시지바·헤더는 자체 동작 유지
+      if (e.target.closest(".story-link, .story-msg, .story-head")) return;
+      dragging = true;
+      sx = e.clientX;
+      sy = e.clientY;
+    },
+    { passive: true }
+  );
+
+  root.addEventListener("pointerup", (e) => {
+    if (!dragging) return;
+    dragging = false;
+    if (e.target.closest(".story-link, .story-msg, .story-head")) return;
+    const dx = e.clientX - sx,
+      dy = e.clientY - sy;
+    if (Math.abs(dx) < THRESH || Math.abs(dx) < Math.abs(dy)) return; // 수평 스와이프만
+    if (hint) hint.style.display = "none";
+    dx < 0 ? next() : prev(); // 왼쪽으로 밀면 다음, 오른쪽이면 이전
   });
+  root.addEventListener("pointercancel", () => (dragging = false));
+
+  // 링크 스티커 → 즉시 LP (스와이프 핸들러 영향 X)
+  document
+    .getElementById("stLink")
+    .addEventListener("click", (e) => e.stopPropagation());
+
+  // 스와이프 안내는 3초 뒤 자동 숨김
+  if (hint) setTimeout(() => (hint.style.display = "none"), 3000);
 
   show(0);
 }

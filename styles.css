@@ -303,7 +303,8 @@ html, body {
 /* ============================================================
    Instagram 스토리 플레이어
    ============================================================ */
-.igstory { flex: 1; position: relative; background: #000; overflow: hidden; }
+.igstory { flex: 1; position: relative; background: #000; overflow: hidden;
+  touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; }
 .story-bg {
   position: absolute; inset: 0; background-size: cover; background-position: center;
   filter: blur(30px) brightness(.5); transform: scale(1.2);
@@ -364,9 +365,11 @@ html, body {
 }
 .msg-ic { color: #fff; font-size: 20px; }
 
-.tap-zone {
-  position: absolute; top: 0; bottom: 0; z-index: 5;
-  border: none; background: transparent; padding: 0; cursor: pointer;
+.swipe-hint {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+  z-index: 6; pointer-events: none;
+  background: rgba(0,0,0,.45); color: #fff; font-size: 13px; font-weight: 700;
+  letter-spacing: 1px; padding: 9px 18px; border-radius: 999px;
+  backdrop-filter: blur(2px); animation: hintPulse 1.4s ease-in-out infinite;
 }
-.tap-prev { left: 0; width: 32%; }
-.tap-next { right: 0; width: 68%; }
+@keyframes hintPulse { 0%,100%{opacity:.5} 50%{opacity:1} }
