@@ -18,6 +18,8 @@ const HYPO = {
     caption:
       "気になるデザイン、あきらめていませんか？お気に入りのテイストを、手が届く価格で。",
     creative: "h1",
+    // 캐러셀 3장 — assets/h1-1.png, h1-2.png, h1-3.png 로 교체 (Figma 노드 참고)
+    figmaSlides: ["6874:2452", "6874:2462", "6874:2487"],
     lp: {
       heroCls: "h1",
       eyebrow: "OHOUSE INTERIOR",
@@ -54,6 +56,8 @@ const HYPO = {
     caption:
       "見た目だけじゃない。長く使える品質を、納得の価格で。Ohouseが厳選しました。",
     creative: "h2",
+    // 캐러셀 3장 — assets/h2-1.png, h2-2.png, h2-3.png 로 교체
+    figmaSlides: ["6874:2510", "6874:2521", "6874:2538"],
     lp: {
       heroCls: "h2",
       eyebrow: "QUALITY & PRICE",
@@ -95,6 +99,8 @@ const HYPO = {
     caption:
       "狭くても、ちゃんとかわいい。どんな空間も、あなたらしく。#一人暮らし #狭い部屋",
     creative: "h3",
+    // 캐러셀 3장 — assets/h3-1.png, h3-2.png, h3-3.png 로 교체
+    figmaSlides: ["6874:2695", "6874:2740", "6874:2792"],
     lp: {
       heroCls: "h3",
       eyebrow: "SMALL SPACE",
@@ -180,6 +186,66 @@ function creative(h) {
     </div>`;
 }
 
+/* 이미지 로드 실패 시(아직 미교체) 재현 크리에이티브로 대체 */
+window.adFallback = function (img) {
+  const k = img.getAttribute("data-h");
+  const wrap = document.createElement("div");
+  wrap.className = "cr-fallback";
+  wrap.innerHTML =
+    creative(HYPO[k]) +
+    `<span class="cr-tag">サンプル · 画像未差し替え</span>`;
+  img.replaceWith(wrap);
+};
+
+/* ---------- Instagram 캐러셀 광고 (가설당 3장, 좌우 스와이프) ---------- */
+function carousel(h, k, lpHref) {
+  const n = (h.figmaSlides || [1, 2, 3]).length || 3;
+  const slides = Array.from({ length: n }, (_, i) => {
+    const src = `assets/h${k}-${i + 1}.png`;
+    return `<a class="ig-slide" href="${lpHref}" aria-label="広告 ${i + 1}/${n}">
+      <img src="${src}" data-h="${k}" alt="広告クリエイティブ ${i + 1}"
+           onerror="this.onerror=null;window.adFallback(this)">
+    </a>`;
+  }).join("");
+  const dots = Array.from({ length: n }, (_, i) =>
+    `<i class="${i === 0 ? "on" : ""}"></i>`
+  ).join("");
+  return `
+  <div class="ig-carousel">
+    <div class="ig-track" id="adTrack">${slides}</div>
+    <span class="ig-count" id="adCount">1/${n}</span>
+    <button class="ig-arrow prev" id="adPrev" aria-label="前へ">‹</button>
+    <button class="ig-arrow next" id="adNext" aria-label="次へ">›</button>
+  </div>
+  <div class="ig-dots" id="adDots">${dots}</div>`;
+}
+
+function wireCarousel() {
+  const track = document.getElementById("adTrack");
+  if (!track) return;
+  const count = document.getElementById("adCount");
+  const dots = [...document.querySelectorAll("#adDots i")];
+  const n = dots.length;
+  const idx = () => Math.round(track.scrollLeft / track.clientWidth);
+  const sync = () => {
+    const i = Math.min(n - 1, Math.max(0, idx()));
+    count.textContent = `${i + 1}/${n}`;
+    dots.forEach((d, j) => d.classList.toggle("on", j === i));
+  };
+  track.addEventListener("scroll", () => window.requestAnimationFrame(sync), {
+    passive: true,
+  });
+  const go = (d) =>
+    track.scrollBy({ left: d * track.clientWidth, behavior: "smooth" });
+  document.getElementById("adPrev").addEventListener("click", () => go(-1));
+  document.getElementById("adNext").addEventListener("click", () => go(1));
+  dots.forEach((d, j) =>
+    d.addEventListener("click", () =>
+      track.scrollTo({ left: j * track.clientWidth, behavior: "smooth" })
+    )
+  );
+}
+
 /* ---------- Instagram 피드 렌더 ---------- */
 function renderFeed() {
   const k = getH();
@@ -226,7 +292,7 @@ function renderFeed() {
           <div class="meta"><b>ohouse_jp</b><small>広告</small></div>
           <div class="dots">···</div>
         </div>
-        <a href="${lpHref}" style="display:block">${creative(h)}</a>
+        ${carousel(h, k, lpHref)}
         <a href="${lpHref}" class="ig-cta"><b>詳しくはこちら</b><span class="chev">›</span></a>
         <div class="ig-actions">${I.heart}${I.comment}${I.share}<span class="spacer"></span>${I.bookmark}</div>
         <div class="ig-likes">「いいね！」3,872件</div>
@@ -252,6 +318,8 @@ function renderFeed() {
     </div>
     ${homeIndicator}
   </div>`;
+
+  wireCarousel();
 
   // 광고가 보이도록 살짝 스크롤(피드 맥락 인지 후 광고 도달)
   const scr = document.getElementById("scr");
