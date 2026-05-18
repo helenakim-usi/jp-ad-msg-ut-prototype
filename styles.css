@@ -309,7 +309,11 @@ html, body {
   position: absolute; inset: 0; background-size: cover; background-position: center;
   filter: blur(30px) brightness(.5); transform: scale(1.2);
 }
-.story-media { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.story-media {
+  position: absolute; top: 0; left: 0; right: 0;
+  bottom: calc(150px + env(safe-area-inset-bottom,0px)); /* 링크 버튼 위로 제한(겹침 방지) */
+  display: flex; align-items: center; justify-content: center;
+}
 .story-media img { width: 100%; height: 100%; object-fit: contain; }
 .story-media .cr-fallback { position: absolute; inset: 0; }
 .story-shade {

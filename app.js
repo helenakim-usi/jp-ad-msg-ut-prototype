@@ -383,7 +383,10 @@ function wireStory(srcs, h, lpHref) {
   // 스와이프 안내는 3초 뒤 자동 숨김
   if (hint) setTimeout(() => (hint.style.display = "none"), 3000);
 
-  show(0);
+  // ?s=2 처럼 특정 슬라이드로 바로 시작(검증·딥링크용, 기본 1)
+  const sParam = parseInt(new URLSearchParams(location.search).get("s"), 10);
+  const start = Number.isFinite(sParam) ? Math.min(n, Math.max(1, sParam)) - 1 : 0;
+  show(start);
 }
 
 /* ---------- LP 렌더 ---------- */
