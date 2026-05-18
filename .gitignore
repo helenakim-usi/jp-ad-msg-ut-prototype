@@ -2,3 +2,6 @@
 assets/*
 !assets/h?-?.jpg
 !.gitignore
+
+# macOS
+.DS_Store
